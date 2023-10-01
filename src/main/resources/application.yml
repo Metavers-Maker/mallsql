@@ -1,0 +1,75 @@
+db:
+  type: mysql
+  host: 172.16.1.185
+  port: 3306
+  username: root
+  password: 123456
+#  host: rm-wz92ki530w199gti2eo.mysql.rds.aliyuncs.com
+#  port: 3306
+#  username: root
+#  password: Link2meta123
+  superusername:
+  superpassword:
+  rolelist: LOGIN,CREATEDB
+  platform:  #用于支持特定存储引擎执行特定sql,如脚本文件以 ".mysql.sql"、".tidb.sql"结尾只在特定存储引擎执行
+
+mail:
+  host: unknow
+  port: 0
+  username:
+  password:
+  to:
+
+# 外部资源
+outside.res:
+  enable: false
+  root: data
+
+spring:
+  main:
+    web-application-type: none
+  application:
+    name: db-runner
+    instance_id: 127.0.0.1
+  datasource-mysql:
+    jdbcUrl: jdbc:mysql://${db.host}:${db.port}/${db.database}?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: ${db.username}
+    password: ${db.password}
+    driverClassName: com.mysql.jdbc.Driver
+    max-idle: 10
+    max-wait: 240000
+    min-idle: 5
+    initial-size: 5
+  flyway:
+    enabled: false
+
+#服务配置
+server:
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+    min-response-size: 4096
+  tomcat:
+    accept-count: 500
+    min-spare-threads: 10
+    max-threads: 3000
+    max-connections: 10000
+    basedir: /usr/local/tomcat/base/${spring.application.name}
+
+#日志配置
+#logging.file: /var/log/muling/${spring.application.name}/${spring.application.name}.log
+logging.file: /Users/fuyizhou/project/db-runner/${spring.application.name}.log
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: INFO
+    com.muling: DEBUG
+
+
+upgrade:
+  outOfOrder: true # 开关开启时，允许执行小于当前版本号的未执行过的脚本
+
+cassandra:
+  keyspace:
+    replication: "{'class':'SimpleStrategy', 'replication_factor' : 1}"

@@ -1,0 +1,39 @@
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
+    <springProperty name="APP" source="spring.application.name" defaultValue="app"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <springProfile name="dev">
+                <pattern>[%clr(%date{yyyy-MM-dd HH:mm:ss.SSSZ}){yellow}]-[${APP}]-%highlight([%level])-[%clr(%X{X-B3-TraceId:-}){cyan}]-[${PID:-}:%-1.30t] %-40.40logger{39} %clr(:){magenta} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+            </springProfile>
+
+            <springProfile name="!dev">
+                <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSSZ}]-[${APP}]-[%level]-[%X{X-B3-TraceId:-}]-[${PID:-}:%-1.30t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+            </springProfile>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.%i.gz</fileNamePattern>
+            <minIndex>${LOG_FILE_MIN_INDEX:-1}</minIndex>
+            <maxIndex>${LOG_FILE_MAX_INDEX:-6}</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>${LOG_FILE_MAX_FILE_SIZE:-10MB}</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSSZ}]-[${APP}]-[%level]-[%X{X-B3-TraceId:-}]-[${PID:-}:%-1.30t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

@@ -1,0 +1,35 @@
+/*!40101 SET NAMES binary*/;
+/*!40014 SET FOREIGN_KEY_CHECKS=0*/;
+
+CREATE TABLE IF NOT EXISTS  `ums_member_oh` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `openid` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `trade_password` varchar(255) DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 DEFAULT '' COMMENT '邮箱地址',
+  `wechat` varchar(1024) DEFAULT '' COMMENT 'wx',
+  `mobile` varchar(255) DEFAULT NULL,
+  `uid` varchar(20) DEFAULT NULL COMMENT '展示ID',
+  `nick_name` varchar(50) DEFAULT NULL,
+  `gender` tinyint(1) DEFAULT '1',
+  `avatar_url` text,
+  `status` tinyint(1) DEFAULT '1',
+  `auth_status` tinyint(1) DEFAULT '0',
+  `birthday` date DEFAULT NULL,
+  `secret` varchar(255) DEFAULT NULL,
+  `is_bind_google` tinyint(1) DEFAULT '0',
+  `chain_address` varchar(255) DEFAULT NULL COMMENT '链地址',
+  `invite_code` varchar(20) DEFAULT NULL,
+  `safe_code` varchar(20) DEFAULT NULL COMMENT '安全码',
+  `salt` varchar(10) DEFAULT NULL,
+  `ext` json DEFAULT NULL COMMENT '扩展字段',
+  `last_login_type` varchar(255) DEFAULT NULL,
+  `last_login_time` datetime DEFAULT NULL,
+  `last_login_ip` varchar(255) DEFAULT NULL,
+  `device_id` text,
+  `deleted` tinyint(1) DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `index_unique_mobile` (`mobile`) USING HASH
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
